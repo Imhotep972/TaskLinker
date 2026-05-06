@@ -1,0 +1,21 @@
+{% extends 'auth/base-logout.html.twig' %}
+
+
+{% block body %}
+
+{{ form_start(form) }}
+
+    {{ form_row(form.nom) }}
+    {{ form_row(form.prenom) }}
+    {{ form_row(form.email) }}
+    {{ form_row(form.password.first) }}
+    {{ form_row(form.password.second) }}
+    <button class="button button-submit">Continuer</button>
+    {{ form_row(form._token) }}
+ {{ form_end(form) }}
+ <div>
+    <a href="{{ path('app_login')}}" class="link-logout">Vous avez déjà un compte ?</a> 
+</div>
+
+
+{% endblock %}
