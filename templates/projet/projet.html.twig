@@ -10,22 +10,31 @@
                 <div class="avatar">{{ employe.prenom | first }}{{ employe.nom | first }}</div>
             {% endfor %}
         </div>
+        {# On affiche le bouton modifier que si le role de l'utilisateur est ROLE_ADMIN #}
+        {% if is_granted('ROLE_ADMIN') %}
         <a class="button" href="{{ path('app_projet_edit', {id: projet.id})}}">Modifier</a>
+        {%endif%}
     </div>
 {% endblock %}
 
 {% block body %}
     <div id="tasks-container">
+
         {% for statut in statuts %}
             <div class="task-column">
                 <h2>{{ statut.libelle }}</h2>
                 <div class="tasks-list">
+
                     {% for tache in projet.taches | filter(tache => tache.statut == statut) %}
+                        {# On affiche la tache que si user est ADMIN ou si la tache lui appartient #}
+                        {% set voter_decision = access_decision('acces_tache', tache.id) %}
+                        {% if voter_decision.isGranted %} 
                         <a class="task" href="{{ path('app_tache', {id: tache.id}) }}">
                             <h3>{{ tache.titre }}</h3>
                             {% if tache.description %}
                                 <p>{{ tache.description }}</p>
                             {% endif %}
+
                             {% if tache.deadline or tache.employe %}
                                 <div class="task-infos">
                                 {% if tache.deadline %}
@@ -33,20 +42,29 @@
                                         <i class="fa-regular fa-calendar"></i> {{ tache.deadline | date('d/m/Y') }}
                                     </div>
                                 {% endif %}
+
                                 {% if tache.employe %}
                                     <div class="mini-user">
                                         {{ tache.employe.prenom | first }}{{ tache.employe.nom | first }}
                                     </div>
                                 {% endif %}
+
                                 </div>
                             {% endif %}
+
                         </a>
+                        {% endif %}
                     {% endfor %}
+
+                    {# on affiche que si le role de l'utilisateur est ROLE_ADMIN #}
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
                         + Ajouter une tâche
                     </a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
+
     </div>
 {% endblock %}

@@ -13,23 +13,22 @@
         <tr>
             <th>Prénom, Nom</th>
             <th>Statut</th>
+            <th>Role</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for employe in employes %}
-            <tr>
+           <tr>
                 <td>
                     <div class="employee-infos">
-                        <div class="employee-avatar">
-                            {{ employe.prenom | first }}{{ employe.nom | first }}
-                        </div>
-                        <div class="employee-coords">
+                       <div class="employee-coords">
                             <strong>{{ employe.prenom }} {{ employe.nom }}</strong>
                             <span>{{ employe.email }}</span>
                         </div>
                     </div>
                 </td>
+                <td>{% if 'ROLE_ADMIN' in employe.roles %} Chef de Projet {%else%} Collaborateur {%endif%}</td> 
                 <td>{{ employe.statut }}</td>
                 <td>
                     <a class="button button-edit-team" href="{{ path('app_employe_edit', {id: employe.id}) }}">

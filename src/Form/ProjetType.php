@@ -18,9 +18,7 @@ class ProjetType extends AbstractType
             ->add('nom', TextType::class, ['label' => 'Titre du projet'])
             ->add('employes', EntityType::class, [
                 'class' => Employe::class,
-                'choice_label' => function (Employe $employe): string {
-                    return $employe->getPrenom() . ' ' . $employe->getNom();
-                },
+                'choice_label' => function (Employe $employe): string {return $employe->getPrenom() . ' ' . $employe->getNom(); },
                 'multiple' => true,
                 'label' => 'Inviter des membres',
                 'required' => false,

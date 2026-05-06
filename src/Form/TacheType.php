@@ -20,7 +20,7 @@ class TacheType extends AbstractType
         $builder
             ->add('titre', TextType::class, ['label' => 'Titre de la tâche'])
             ->add('description', TextareaType::class, ['required' => false])
-            ->add('deadline', DateType::class, ['label' => 'Date', 'widget' => 'single_text', 'required' => false])
+            ->add('deadline', DateType::class, ['label' => 'Date limite', 'widget' => 'single_text', 'required' => false])
             ->add('statut', EntityType::class, [
                 'class' => Statut::class,
                 'choice_label' => 'libelle',

@@ -8,16 +8,17 @@
 
 {% block body %}
 
-{{ form_start(form) }}
+    {{ form_start(form) }}
 
-{{ form_row(form.nom) }}
-{{ form_row(form.prenom) }}
-{{ form_row(form.email) }}
-<div class="form-flex">
-    {{ form_row(form.dateArrivee) }}
-    {{ form_row(form.statut) }}
-</div>
-<button class="button button-submit">Enregistrer</button>
-{{ form_end(form) }}
+        {{ form_row(form.nom) }}
+        {{ form_row(form.prenom) }}
+        {{ form_row(form.email) }}
+        <div class="form-flex">
+            {{ form_row(form.dateArrivee) }}
+            {{ form_row(form.statut) }}
+        </div>
+        {{ form_row(form.roles) }}
+        <button class="button button-submit">Enregistrer</button>
+    {{ form_end(form) }}
 
 {% endblock %}

@@ -19,22 +19,31 @@
                 <a href="{{ path('app_projets') }}" id="logo">
                     <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
                 </a>
+
                 <ul id="main-menu">
                     <li class="{% if not (app.request.attributes.get('_route') starts with 'app_employe') %}active{% endif %}">
                         <a href="{{ path('app_projets') }}">
                             <i class="fa-solid fa-list-check"></i> Projets
                         </a>
                     </li>
+                {% if is_granted('ROLE_ADMIN') %}
                     <li class="{% if app.request.attributes.get('_route') starts with 'app_employe' %}active{% endif %}">
                         <a href="{{ path('app_employes') }}">
                             <i class="fa-regular fa-user"></i> Équipe
                         </a>
                     </li>
+                {%endif%}
                 </ul>
             </nav>
             <main>
                 <header>
-                    <div id="current-user"></div>
+                    <div id="current-user">
+                    {% if app.user %}
+                        <a href="{{path('app_logout')}}" class="employee-avatar">
+                            {{ app.user.prenom |first }}{{app.user.nom|first}}
+                        </a>
+                    {% endif %}
+                    </div>
                     <div id="title-page">
                         {% block header %}{% endblock %}
                     </div>

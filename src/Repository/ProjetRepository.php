@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Projet;
+use App\Entity\Employe;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +20,18 @@ class ProjetRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Projet::class);
+    }
+
+    public function findByEmploye(int $employeId): array
+    {
+        return $this->createQueryBuilder('p')                       // sql sur l'entité App\Entity\Projet
+            ->select('p.id')                                        // on fait un select sur projet id
+            ->innerJoin('p.employes', 'e')                          // jointure avec App\Entity\Employe
+            ->where('e.id = :id')                                   // clause sur l'id de l'employé
+            ->andWhere('p.archive = false')                         // on ne veut que les projets non supprimés
+            ->setParameter('id', $employeId)                        // recuperation de l'employé demandé
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**

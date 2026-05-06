@@ -10,6 +10,7 @@ use App\Entity\Tache;
 use App\Entity\Statut;
 use \DateTime;
 use \DateInterval;
+use \DateTimeImmutable;
 
 class AppFixtures extends Fixture
 {
@@ -28,14 +29,14 @@ class AppFixtures extends Fixture
         $done->setLibelle('Done');
         $manager->persist($done);
 
-        
+      
         // Création des employés
         $employe1 = new Employe();
         $employe1->setNom('Dillon')
             ->setPrenom('Natalie')
             ->setEmail('natalie@driblet.com')
             ->setStatut('CDI')
-            ->setDateArrivee(new DateTime('2019-06-14'));
+            ->setDateArrivee(new DateTimeImmutable('2019-06-14'));
         $manager->persist($employe1);
 
         $employe2 = new Employe();
@@ -43,7 +44,7 @@ class AppFixtures extends Fixture
             ->setPrenom('Demi')
             ->setEmail('demi@driblet.com')
             ->setStatut('CDD')
-            ->setDateArrivee(new DateTime('2022-09-01'));
+            ->setDateArrivee(new DateTimeImmutable('2022-09-01'));
         $manager->persist($employe2);
 
         $employe3 = new Employe();
@@ -51,7 +52,7 @@ class AppFixtures extends Fixture
             ->setPrenom('Marie')
             ->setEmail('marie@driblet.com')
             ->setStatut('Freelance')
-            ->setDateArrivee(new DateTime('2021-12-20'));
+            ->setDateArrivee(new DateTimeImmutable('2021-12-20'));
         $manager->persist($employe3);
 
         // Création des projets
@@ -59,24 +60,24 @@ class AppFixtures extends Fixture
         $projet1
             ->setNom('TaskLinker')
             ->setArchive(false)
-            ->addEmploye($employe1)
-            ->addEmploye($employe2);
+            ->addEmployes($employe1)
+            ->addEmployes($employe2);
         $manager->persist($projet1);
 
         $projet2 = new Projet();
         $projet2
             ->setNom('Application mobile Grand Nancy')
             ->setArchive(true)
-            ->addEmploye($employe2)
-            ->addEmploye($employe3);
+            ->addEmployes($employe2)
+            ->addEmployes($employe3);
         $manager->persist($projet2);
 
         $projet3 = new Projet();
         $projet3
             ->setNom('Site vitrine Les Soeurs Marchand')
             ->setArchive(false)
-            ->addEmploye($employe1)
-            ->addEmploye($employe3);
+            ->addEmployes($employe1)
+            ->addEmployes($employe3);
         $manager->persist($projet3);
 
         // Création des tâches

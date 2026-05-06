@@ -8,24 +8,40 @@
 
 {% block body %}
 
-<div id="projects-container">
+    <div id="projects-container">
+    {# 
+        On affiche la liste des projets (non archivés) 
+        Si utilisateur est ROLE_ADMIN on affiche tout
+        sinon on affiche que si l'utilisateur est dans le projet
+
+        On peut aussi utiliser la fonction findfindByEmploye(projet_id) pour l'utilisateur connecté
+    #}
     {% for projet in projets %}
-        <article class="card-project">
-            <a href="{{ path('app_projet', {id: projet.id}) }}">
-                <h2>{{ projet.nom }}</h2>
-            </a>
-            <div class="card-project-icons">
-                <a href="{{ path('app_projet_edit', {id: projet.id}) }}"><i class="fa-solid fa-pen"></i></a>
-                <a href="{{ path('app_projet_archive', {id: projet.id}) }}"><i class="fa-solid fa-trash"></i></a>
-            </div>
-        </article>
+        {% set voter_decision = access_decision('acces_projet', projet.id) %}
+        {% if voter_decision.isGranted %} 
+            <article class="card-project">
+                <a href="{{ path('app_projet', {id: projet.id}) }}">
+                    <h2>{{ projet.nom }}</h2>
+                </a>
+                <div class="card-project-icons">
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_projet_edit', {id: projet.id}) }}"><i class="fa-solid fa-pen"></i></a>
+                    <a href="{{ path('app_projet_archive', {id: projet.id}) }}"><i class="fa-solid fa-trash"></i></a>
+                {% endif %}
+                </div>
+            </article>
+        {% endif %}
     {% endfor %}
 
-    <article class="card-project">
-        <a href="{{ path('app_projet_add') }}">
-            <i class="fa-solid fa-circle-plus add-project-icon"></i>
-            <h2>Ajouter un projet</h2>
-        </a>
-    </article>
-</div>
+    {# Uniquement un utilisateur avec le ROLE_ADMIN peut acceder #}
+    {% if is_granted('ROLE_ADMIN') %}
+        <article class="card-project">
+            <a href="{{ path('app_projet_add') }}">
+                <i class="fa-solid fa-circle-plus add-project-icon"></i>
+                <h2>Ajouter un projet</h2>
+            </a>
+        </article>
+    </div>
+    {% endif%}
+    
 {% endblock %}

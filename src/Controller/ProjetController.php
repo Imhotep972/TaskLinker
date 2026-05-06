@@ -11,6 +11,7 @@ use App\Repository\StatutRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Projet;
 use App\Form\ProjetType;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ProjetController extends AbstractController
 {
@@ -23,18 +24,47 @@ class ProjetController extends AbstractController
 
     }
 
+    /* acces si ROLE_ADMIN ou si l'user appartient au projet */
     #[Route('/', name: 'app_projets')]
     public function projets(): Response
     {
-        $projets = $this->projetRepository->findBy([
-            'archive' => false,
-        ]);
+ 
+    /*
+        Affichage de la liste des projets de l'utilisateur ou bien tous si ROLE_ADMIN
+        avec $this->projetRepository->findByEmploye($user->getId())
+        ceci fait doublon avec le controle d'acces (ProjetVoter)
+    */
+    /*     $user = $this->getUser();
+        if (in_array('ROLE_ADMIN',$user->getRoles()) )
+        {
+            $projets = $this->projetRepository->findBy([
+                'archive' => false,
+            ]);
+        }
+        else
+        {
+            // Récupération des projets liés à l'employé
+            $projets = $this->projetRepository->findByEmploye($user->getId());
+        }
+        return $this->render('projet/liste.html.twig', [
+            'projets' => $projets, 
+        ]); 
 
+
+    */    
+        $projets = $this->projetRepository->findBy([
+                'archive' => false,
+            ]);
+            
         return $this->render('projet/liste.html.twig', [
             'projets' => $projets,
-        ]);
+
+        ]); 
+
     }
 
+    /* Uniquement acces si ROLE_ADMIN */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projets/ajouter', name: 'app_projet_add')]
     public function ajouterProjet(Request $request): Response
     {  
@@ -50,12 +80,13 @@ class ProjetController extends AbstractController
             return $this->redirectToRoute('app_projet', ['id' => $projet->getId()]);
         }
 
-
         return $this->render('projet/nouveau.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
+    /* acces si user appartient au projet ou ROLE_ADMIN */
+    #[isGranted('acces_projet','id')]
     #[Route('/projets/{id}', name: 'app_projet')]
     public function projet(int $id): Response
     {  
@@ -72,6 +103,8 @@ class ProjetController extends AbstractController
         ]);
     }
 
+    /* Uniquement acces si ROLE_ADMIN */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projets/{id}/archiver', name: 'app_projet_archive')]
     public function archiverProjet(int $id): Response
     {  
@@ -82,12 +115,14 @@ class ProjetController extends AbstractController
         }
 
         $projet->setArchive(true);
+        $this->entityManager->persist($projet);
         $this->entityManager->flush();
         
         return $this->redirectToRoute('app_projets');
     }
 
-
+    /* Uniquement acces si ROLE_ADMIN */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/projets/{id}/editer', name: 'app_projet_edit')]
     public function editerProjet(int $id, Request $request): Response
     {  
@@ -101,11 +136,12 @@ class ProjetController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+        
             $projet->setArchive(false);
             $this->entityManager->flush();
-            return $this->redirectToRoute('app_projet', ['id' => $projet->getId()]);
-        }
 
+           return $this->redirectToRoute('app_projet', ['id' => $projet->getId()]);
+        }
 
         return $this->render('projet/editer.html.twig', [
             'projet' => $projet,
