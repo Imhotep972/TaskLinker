@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ProjetRepository;
-use App\Repository\StatutRepository;
 use App\Repository\TacheRepository;
 use App\Form\TacheType;
 use App\Entity\Tache;
@@ -27,7 +26,7 @@ class TacheController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/projets/{id}/taches/ajouter', name: 'app_tache_add')]
+    #[Route('/projets/{id}/taches/ajouter', name: 'app_tache_add', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function ajouterTache(int $id, Request $request): Response
     {  
         $projet = $this->projetRepository->find($id);
@@ -54,7 +53,7 @@ class TacheController extends AbstractController
     }
 
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/taches/{id}/supprimer', name: 'app_tache_delete')]
+    #[Route('/taches/{id}/supprimer', name: 'app_tache_delete', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function supprimerTache(int $id): Response
     {  
         $tache = $this->tacheRepository->find($id);
@@ -71,7 +70,7 @@ class TacheController extends AbstractController
 
 
     #[isGranted('acces_tache','id')]
-    #[Route('/taches/{id}', name: 'app_tache')]
+    #[Route('/taches/{id}', name: 'app_tache', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function tache(int $id, Request $request): Response
     {  
         $tache = $this->tacheRepository->find($id);

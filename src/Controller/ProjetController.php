@@ -24,7 +24,7 @@ class ProjetController extends AbstractController
 
     }
 
-    /* acces si ROLE_ADMIN ou si l'user appartient au projet */
+    /* affichage des projets si ROLE_ADMIN ou seulement ceux de l'user */
     #[Route('/', name: 'app_projets')]
     public function projets(): Response
     {
@@ -87,7 +87,7 @@ class ProjetController extends AbstractController
 
     /* acces si user appartient au projet ou ROLE_ADMIN */
     #[isGranted('acces_projet','id')]
-    #[Route('/projets/{id}', name: 'app_projet')]
+    #[Route('/projets/{id}', name: 'app_projet', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function projet(int $id): Response
     {  
         $statuts = $this->statutRepository->findAll();
@@ -105,7 +105,7 @@ class ProjetController extends AbstractController
 
     /* Uniquement acces si ROLE_ADMIN */
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/projets/{id}/archiver', name: 'app_projet_archive')]
+    #[Route('/projets/{id}/archiver', name: 'app_projet_archive', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function archiverProjet(int $id): Response
     {  
         $projet = $this->projetRepository->find($id);
@@ -123,7 +123,7 @@ class ProjetController extends AbstractController
 
     /* Uniquement acces si ROLE_ADMIN */
     #[IsGranted('ROLE_ADMIN')]
-    #[Route('/projets/{id}/editer', name: 'app_projet_edit')]
+    #[Route('/projets/{id}/editer', name: 'app_projet_edit', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function editerProjet(int $id, Request $request): Response
     {  
         $projet = $this->projetRepository->find($id);

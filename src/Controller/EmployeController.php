@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Entity\Employe;
 use App\Repository\EmployeRepository;
 use App\Form\EmployeType;
@@ -77,6 +78,7 @@ class EmployeController extends AbstractController
     }
 
     /*  Gestion employé    */
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/employes', name: 'app_employes')]
     public function employes(): Response
     {
@@ -87,7 +89,8 @@ class EmployeController extends AbstractController
         ]);
     }
 
-    #[Route('/employes/{id}', name: 'app_employe',requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/employes/{id}', name: 'app_employe', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function employe(int $id): Response
     {
         $employe = $this->employeRepository->find($id);
@@ -102,7 +105,8 @@ class EmployeController extends AbstractController
         ]);
     }
 
-    #[Route('/employes/{id}/supprimer', name: 'app_employe_delete')]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/employes/{id}/supprimer', name: 'app_employe_delete', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function supprimerEmploye(int $id): Response
     {
         $employe = $this->employeRepository->find($id);
@@ -118,7 +122,8 @@ class EmployeController extends AbstractController
         return $this->redirectToRoute('app_employes');
     }
 
-    #[Route('/employes/{id}/editer', name: 'app_employe_edit')]
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/employes/{id}/editer', name: 'app_employe_edit', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function editEmployer(int $id, Request $request): Response
     {
         $employe = $this->employeRepository->find($id);
