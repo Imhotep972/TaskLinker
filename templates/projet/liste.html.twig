@@ -14,11 +14,11 @@
         Si utilisateur est ROLE_ADMIN on affiche tout
         sinon on affiche que si l'utilisateur est dans le projet
 
-        On peut aussi utiliser la fonction findfindByEmploye(projet_id) pour l'utilisateur connecté
+        On peut aussi utiliser la fonction findByEmploye(projet_id) pour l'utilisateur connecté
     #}
     {% for projet in projets %}
-        {% set voter_decision = access_decision('acces_projet', projet.id) %}
-        {% if voter_decision.isGranted %} 
+        {# set voter_decision = access_decision('acces_projet', projet.id) %}
+        {% if voter_decision.isGranted %#} 
             <article class="card-project">
                 <a href="{{ path('app_projet', {id: projet.id}) }}">
                     <h2>{{ projet.nom }}</h2>
@@ -30,7 +30,7 @@
                 {% endif %}
                 </div>
             </article>
-        {% endif %}
+        {#% endif %#}
     {% endfor %}
 
     {# Uniquement un utilisateur avec le ROLE_ADMIN peut acceder #}

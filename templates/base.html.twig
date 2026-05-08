@@ -40,7 +40,7 @@
                     <div id="current-user">
                     {% if app.user %}
                         <a href="{{path('app_logout')}}" class="employee-avatar">
-                            {{ app.user.prenom |first }}{{app.user.nom|first}}
+                            {{ app.user.prenom |first }} {{app.user.nom|first}}
                         </a>
                     {% endif %}
                     </div>

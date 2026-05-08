@@ -32,9 +32,9 @@ class ProjetController extends AbstractController
     /*
         Affichage de la liste des projets de l'utilisateur ou bien tous si ROLE_ADMIN
         avec $this->projetRepository->findByEmploye($user->getId())
-        ceci fait doublon avec le controle d'acces (ProjetVoter)
     */
-    /*     $user = $this->getUser();
+        $user = $this->getUser();
+        $employId = $user->getId();
         if (in_array('ROLE_ADMIN',$user->getRoles()) )
         {
             $projets = $this->projetRepository->findBy([
@@ -44,23 +44,11 @@ class ProjetController extends AbstractController
         else
         {
             // Récupération des projets liés à l'employé
-            $projets = $this->projetRepository->findByEmploye($user->getId());
+            $projets = $this->projetRepository->findByEmploye($employId);
         }
         return $this->render('projet/liste.html.twig', [
             'projets' => $projets, 
         ]); 
-
-
-    */    
-        $projets = $this->projetRepository->findBy([
-                'archive' => false,
-            ]);
-            
-        return $this->render('projet/liste.html.twig', [
-            'projets' => $projets,
-
-        ]); 
-
     }
 
     /* Uniquement acces si ROLE_ADMIN */
@@ -92,6 +80,8 @@ class ProjetController extends AbstractController
     {  
         $statuts = $this->statutRepository->findAll();
         $projet = $this->projetRepository->find($id);
+        $user = $this->getUser();
+        $employeId = $user->getId();
 
         if(!$projet || $projet->isArchive()) {
             return $this->redirectToRoute('app_projets');
@@ -100,6 +90,7 @@ class ProjetController extends AbstractController
         return $this->render('projet/projet.html.twig', [
             'projet' => $projet,
             'statuts' => $statuts,
+            'employeId', $employeId,
         ]);
     }
 
@@ -121,7 +112,7 @@ class ProjetController extends AbstractController
         return $this->redirectToRoute('app_projets');
     }
 
-    /* Uniquement acces si ROLE_ADMIN */
+    /* Uniquement acces si ROLE_ADMIN  */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/projets/{id}/editer', name: 'app_projet_edit', methods: ['GET'], requirements: ['id'=>'\d+'])]
     public function editerProjet(int $id, Request $request): Response

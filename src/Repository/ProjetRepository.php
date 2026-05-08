@@ -25,7 +25,7 @@ class ProjetRepository extends ServiceEntityRepository
     public function findByEmploye(int $employeId): array
     {
         return $this->createQueryBuilder('p')                       // sql sur l'entité App\Entity\Projet
-            ->select('p.id')                                        // on fait un select sur projet id
+            //->select('p.id')                                        // on fait un select sur projet id
             ->innerJoin('p.employes', 'e')                          // jointure avec App\Entity\Employe
             ->where('e.id = :id')                                   // clause sur l'id de l'employé
             ->andWhere('p.archive = false')                         // on ne veut que les projets non supprimés

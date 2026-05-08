@@ -77,7 +77,7 @@ class EmployeController extends AbstractController
 
     }
 
-    /*  Gestion employé    */
+    /*  Gestion employé   */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/employes', name: 'app_employes')]
     public function employes(): Response

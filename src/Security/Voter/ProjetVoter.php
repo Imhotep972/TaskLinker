@@ -50,7 +50,7 @@ final class ProjetVoter extends Voter
                     // on recupere les projets de l'utilisateur et si il appartient au projet on donne l'acces
                     $projets = $this->projetRepository->findByEmploye($uid);
                     foreach($projets as $projet) {               
-                        if ($projet['id'] == $subject)
+                        if ($projet->getID() == $subject)
                             return true; 
                     }
                     // si on arrive là, l'utilisateur n'appartient pas au

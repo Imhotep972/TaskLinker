@@ -22,6 +22,9 @@
            <tr>
                 <td>
                     <div class="employee-infos">
+                        <div class="employee-avatar">
+                           {{ employe.prenom | first }} {{ employe.nom | first }} 
+                        </div>
                        <div class="employee-coords">
                             <strong>{{ employe.prenom }} {{ employe.nom }}</strong>
                             <span>{{ employe.email }}</span>
