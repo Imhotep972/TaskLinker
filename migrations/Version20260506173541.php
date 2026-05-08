@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260427162522 extends AbstractMigration
+final class Version20260506173541 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,6 @@ final class Version20260427162522 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE employe_projet (employe_id INT NOT NULL, projet_id INT NOT NULL, INDEX IDX_3E3387501B65292 (employe_id), INDEX IDX_3E338750C18272 (projet_id), PRIMARY KEY (employe_id, projet_id)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('ALTER TABLE employe_projet ADD CONSTRAINT FK_3E3387501B65292 FOREIGN KEY (employe_id) REFERENCES employe (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE employe_projet ADD CONSTRAINT FK_3E338750C18272 FOREIGN KEY (projet_id) REFERENCES projet (id) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE projet_employe DROP FOREIGN KEY `FK_7A2E8EC81B65292`');
-        $this->addSql('ALTER TABLE projet_employe DROP FOREIGN KEY `FK_7A2E8EC8C18272`');
-        $this->addSql('DROP TABLE projet_employe');
         $this->addSql('ALTER TABLE employe ADD roles JSON NOT NULL, ADD password VARCHAR(255) NOT NULL, CHANGE email email VARCHAR(180) NOT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON employe (email)');
         $this->addSql('DROP INDEX IDX_75EA56E0FB7336F0 ON messenger_messages');
@@ -38,12 +32,6 @@ final class Version20260427162522 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE projet_employe (projet_id INT NOT NULL, employe_id INT NOT NULL, INDEX IDX_7A2E8EC8C18272 (projet_id), INDEX IDX_7A2E8EC81B65292 (employe_id), PRIMARY KEY (projet_id, employe_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB COMMENT = \'\' ');
-        $this->addSql('ALTER TABLE projet_employe ADD CONSTRAINT `FK_7A2E8EC81B65292` FOREIGN KEY (employe_id) REFERENCES employe (id) ON UPDATE NO ACTION ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE projet_employe ADD CONSTRAINT `FK_7A2E8EC8C18272` FOREIGN KEY (projet_id) REFERENCES projet (id) ON UPDATE NO ACTION ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE employe_projet DROP FOREIGN KEY FK_3E3387501B65292');
-        $this->addSql('ALTER TABLE employe_projet DROP FOREIGN KEY FK_3E338750C18272');
-        $this->addSql('DROP TABLE employe_projet');
         $this->addSql('DROP INDEX UNIQ_IDENTIFIER_EMAIL ON employe');
         $this->addSql('ALTER TABLE employe DROP roles, DROP password, CHANGE email email VARCHAR(255) NOT NULL');
         $this->addSql('DROP INDEX IDX_75EA56E0FB7336F0E3BD61CE16BA31DBBF396750 ON messenger_messages');
